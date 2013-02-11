@@ -209,12 +209,15 @@ module.exports = function(grunt) {
     // async task, call it (or not if you wish to use this task standalone)
     var cb = this.async();
 
+    var appLocation = grunt.config('source') || "app";
+    var distLocation = grunt.config('output') || "dist";
+
     // valid target are app (default), prod and test
     var targets = {
       // these paths once config and paths resolved will need to pull in the
       // correct paths from config
-      app: path.resolve('app'),
-      dist: path.resolve('dist'),
+      app: path.resolve(appLocation),
+      dist: path.resolve(distLocation),
       test: path.resolve('test'),
 
       // phantom target is a special one: it is triggered
@@ -226,7 +229,7 @@ module.exports = function(grunt) {
       // reload is a special one, acting like `app` but not opening the HTTP
       // server in default browser and forcing the port to LiveReload standard
       // port.
-      reload: path.resolve('app')
+      reload: path.resolve(appLocation)
     };
 
     target = target || 'app';
@@ -293,10 +296,13 @@ module.exports = function(grunt) {
     middleware.push(connect.directory(opts.base));
 
     if ( (opts.target === 'test') || ( opts.target === 'phantom')) {
+      
+      var appLocation = grunt.config('source') || "app";
+
       // We need to expose our code as well
-      middleware.push(connect.static(path.resolve('app')));
+      middleware.push(connect.static(path.resolve(appLocation)));
       // Make empty directories browsable.
-      middleware.push(connect.directory(path.resolve('app')));
+      middleware.push(connect.directory(path.resolve(appLocation)));
     }
 
     middleware = middleware.concat([
