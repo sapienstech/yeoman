@@ -209,6 +209,8 @@ module.exports = function(grunt) {
     // async task, call it (or not if you wish to use this task standalone)
     var cb = this.async();
 
+    var appCustomTasks = grunt.config('server.app.customTasks') || "";
+
     // valid target are app (default), prod and test
     var targets = {
       // these paths once config and paths resolved will need to pull in the
@@ -243,7 +245,7 @@ module.exports = function(grunt) {
       // We do want our coffee, and compass recompiled on change
       // and our browser opened and refreshed both when developping
       // (app) and when writing tests (test)
-      app: 'clean coffee compass open-browser watch',
+      app: 'clean coffee compass '+ appCustomTasks +' open-browser watch',
       test: 'clean coffee compass open-browser watch',
       // Before our headless tests are run, ensure our coffee
       // and compass are recompiled
